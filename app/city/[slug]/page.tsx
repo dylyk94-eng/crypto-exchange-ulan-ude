@@ -1,7 +1,4 @@
-'use client';
-
-import { useEffect } from 'react';
-import { notFound, useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import Contact from '@/components/Contact';
 import CustomCursor from '@/components/CustomCursor';
@@ -75,28 +72,9 @@ const cityBenefits = [
   },
 ];
 
-export default function CityPage() {
-  const params = useParams();
-  const slug = params.slug as string;
+export default function CityPage({ params }: { params: { slug: string } }) {
+  const slug = params.slug;
   const city = cities[slug as keyof typeof cities];
-
-  useEffect(() => {
-    const elements = document.querySelectorAll('.fade-in');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-    );
-
-    elements.forEach((element) => observer.observe(element));
-
-    return () => observer.disconnect();
-  }, []);
 
   if (!city) {
     notFound();
@@ -229,4 +207,11 @@ export default function CityPage() {
       <Footer />
     </div>
   );
+}
+
+export function generateStaticParams() {
+  return [
+    { slug: 'ulan-ude' },
+    { slug: 'chita' },
+  ];
 }
