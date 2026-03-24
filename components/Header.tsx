@@ -13,6 +13,20 @@ const navItems = [
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem('theme');
+    const initial: 'light' | 'dark' =
+      saved === 'dark' || saved === 'light'
+        ? saved
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+
+    setTheme(initial);
+    document.body.classList.toggle('theme-dark', initial === 'dark');
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 16);
@@ -27,6 +41,13 @@ export default function Header() {
       document.body.style.overflow = '';
     };
   }, [isMobileMenuOpen]);
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    document.body.classList.toggle('theme-dark', next === 'dark');
+    window.localStorage.setItem('theme', next);
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-[rgba(73,53,35,0.08)] bg-[rgba(248,243,235,0.78)] backdrop-blur-xl">
@@ -55,7 +76,16 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-3 md:flex">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="inline-flex min-h-12 items-center gap-2 rounded-full border border-[rgba(73,53,35,0.12)] bg-[rgba(255,255,255,0.6)] px-4 text-sm font-semibold text-[rgba(36,28,20,0.84)] transition hover:bg-[rgba(255,255,255,0.78)]"
+            aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить темную тему'}
+          >
+            <span>{theme === 'dark' ? '☀' : '✦'}</span>
+            <span>{theme === 'dark' ? 'Светлая' : 'Тёмная'}</span>
+          </button>
           <a href="https://t.me/Crypto_u_u" target="_blank" rel="noreferrer" className="btn-primary">
             Написать в Telegram
           </a>
@@ -78,6 +108,13 @@ export default function Header() {
         className={`fixed inset-x-0 top-full z-40 border-b border-[rgba(73,53,35,0.08)] bg-[rgba(248,243,235,0.98)] p-4 transition-all duration-300 md:hidden ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'}`}
       >
         <div className="space-y-2">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="block w-full rounded-2xl border border-[rgba(73,53,35,0.12)] bg-[rgba(255,255,255,0.45)] px-4 py-3 text-left text-sm font-semibold text-[rgba(36,28,20,0.82)] hover:bg-[rgba(255,255,255,0.7)]"
+          >
+            {theme === 'dark' ? '☀ Светлая тема' : '✦ Тёмная тема'}
+          </button>
           {navItems.map((item) => (
             <Link
               key={item.href}

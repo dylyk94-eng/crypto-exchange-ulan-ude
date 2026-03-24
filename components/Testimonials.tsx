@@ -60,7 +60,7 @@ export default function Testimonials() {
             Что говорят клиенты
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
-            Шесть коротких отзывов о том, как проходит общение, согласование условий и сама сделка.
+            Реальные отзывы клиентов о скорости, коммуникации и прозрачности условий.
           </p>
         </div>
 
@@ -68,11 +68,7 @@ export default function Testimonials() {
           {testimonials.map((testimonial, index) => (
             <article
               key={`${testimonial.name}-${testimonial.note}`}
-              className={`reveal rounded-[30px] border p-6 ${
-                index === 0
-                  ? 'border-[rgba(17,94,89,0.14)] bg-[rgba(255,249,241,0.94)] shadow-[0_20px_48px_rgba(77,57,37,0.08)]'
-                  : 'border-[rgba(73,53,35,0.08)] bg-[rgba(255,255,255,0.66)]'
-              }`}
+              className="reveal rounded-[30px] border border-[rgba(73,53,35,0.08)] bg-[rgba(255,255,255,0.66)] p-6"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>

@@ -11,7 +11,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-10 border-t border-[rgba(73,53,35,0.08)] bg-[rgba(246,239,229,0.96)] text-[rgba(84,68,53,0.8)]">
+    <footer className="site-footer mt-10 border-t border-[rgba(73,53,35,0.08)] bg-[rgba(246,239,229,0.96)] text-[rgba(84,68,53,0.8)]">
       <div className="mx-auto grid max-w-[74rem] gap-10 p-6 md:grid-cols-3 md:p-10">
         <div>
           <h2 className="text-lg font-bold text-[rgba(36,28,20,0.96)]">Криптообмен</h2>
