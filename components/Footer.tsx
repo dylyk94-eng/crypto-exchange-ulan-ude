@@ -17,6 +17,9 @@ export default function Footer() {
           <h2 className="text-lg font-bold text-[rgba(36,28,20,0.96)]">Криптообмен</h2>
           <p className="mt-3 text-sm">Офлайн обмен USDT, BTC и ETH, а также переводы за рубеж по согласованию.</p>
           <p className="mt-4 text-xs text-[rgba(84,68,53,0.62)]">© {year} Криптообмен. Все права защищены.</p>
+          <Link href="/privacy" className="mt-2 block text-xs text-[rgba(84,68,53,0.62)] hover:text-[rgba(17,94,89,1)]">
+            Политика конфиденциальности
+          </Link>
         </div>
 
         <div>

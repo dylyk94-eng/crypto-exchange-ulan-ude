@@ -68,7 +68,16 @@ export default function LeadForm({ city, compact = false, onSubmit }: LeadFormPr
       )}
       {submitStatus === 'demo' && (
         <div className="mb-4 rounded-2xl border border-[rgba(217,119,6,0.22)] bg-[rgba(217,119,6,0.08)] p-3 text-sm text-[rgba(31,26,20,0.82)]">
-          Сейчас включен demo-режим. Заявка записана локально.
+          Уведомления временно не настроены. Для связи напишите нам напрямую в{' '}
+          <a
+            href="https://t.me/Crypto_u_u"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium underline"
+          >
+            Telegram
+          </a>
+          .
         </div>
       )}
       {submitStatus === 'error' && (
@@ -140,7 +149,11 @@ export default function LeadForm({ city, compact = false, onSubmit }: LeadFormPr
       </form>
 
       <p className="mt-3 text-center text-xs text-muted">
-        Отправляя форму, вы соглашаетесь на обратную связь по указанным контактам.
+        Отправляя форму, вы соглашаетесь с нашей{' '}
+        <a href="/privacy" className="underline hover:text-[rgba(17,94,89,0.9)]">
+          политикой конфиденциальности
+        </a>{' '}
+        и на обратную связь по указанным контактам.
       </p>
     </div>
   );

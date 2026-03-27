@@ -39,6 +39,7 @@ export default function CryptoRates() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isStale, setIsStale] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -61,6 +62,8 @@ export default function CryptoRates() {
         setRates(data.rates);
         setUpdatedAt(data.updatedAt);
         setDisclaimer(data.disclaimer);
+        const ageMs = Date.now() - new Date(data.updatedAt).getTime();
+        setIsStale(ageMs > 2 * 60 * 1000);
       } catch (fetchError) {
         console.error('Failed to load rates:', fetchError);
         if (active) {
@@ -141,7 +144,14 @@ export default function CryptoRates() {
 
           <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <p className="text-sm leading-6 text-muted">{disclaimer}</p>
-            {error && <div className="text-sm font-medium text-[rgba(185,28,28,0.82)]">{error}</div>}
+            <div className="flex flex-col gap-2 text-right">
+              {isStale && !error && (
+                <div className="text-sm font-medium text-[rgba(217,119,6,0.88)]">
+                  Курс может быть устаревшим — данные не обновлялись более 2 минут
+                </div>
+              )}
+              {error && <div className="text-sm font-medium text-[rgba(185,28,28,0.82)]">{error}</div>}
+            </div>
           </div>
         </div>
       </div>

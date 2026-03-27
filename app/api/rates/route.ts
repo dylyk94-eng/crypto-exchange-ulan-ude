@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import logger from '@/lib/logger';
 
 type CoinGeckoResponse = {
   bitcoin?: { rub?: number; last_updated_at?: number };
@@ -9,13 +10,28 @@ type CoinGeckoResponse = {
   binancecoin?: { rub?: number; last_updated_at?: number };
 };
 
-const DEFAULT_MARKUPS = {
-  BTC: Number(process.env.RATE_MARKUP_BTC ?? '1.8'),
-  ETH: Number(process.env.RATE_MARKUP_ETH ?? '1.8'),
-  USDT: Number(process.env.RATE_MARKUP_USDT ?? '1.2'),
-  LTC: Number(process.env.RATE_MARKUP_LTC ?? '1.6'),
-  TRX: Number(process.env.RATE_MARKUP_TRX ?? '1.4'),
-  BNB: Number(process.env.RATE_MARKUP_BNB ?? '1.7'),
+const MARKUP_MIN = 0;
+const MARKUP_MAX = 50;
+
+function parseMarkup(envVar: string | undefined, fallback: number): number {
+  const val = Number(envVar ?? fallback);
+  if (isNaN(val) || val < MARKUP_MIN || val > MARKUP_MAX) {
+    logger.warn(
+      { envVar, fallback },
+      `Invalid markup value "${envVar}" — using fallback ${fallback}%`
+    );
+    return fallback;
+  }
+  return val;
+}
+
+const MARKUPS = {
+  BTC: parseMarkup(process.env.RATE_MARKUP_BTC, 1.8),
+  ETH: parseMarkup(process.env.RATE_MARKUP_ETH, 1.8),
+  USDT: parseMarkup(process.env.RATE_MARKUP_USDT, 1.2),
+  LTC: parseMarkup(process.env.RATE_MARKUP_LTC, 1.6),
+  TRX: parseMarkup(process.env.RATE_MARKUP_TRX, 1.4),
+  BNB: parseMarkup(process.env.RATE_MARKUP_BNB, 1.7),
 };
 
 function applyMarkup(price: number, percent: number) {
@@ -33,6 +49,7 @@ export async function GET() {
     );
 
     if (!response.ok) {
+      logger.error({ status: response.status }, 'CoinGecko request failed');
       throw new Error(`Rates request failed with status ${response.status}`);
     }
 
@@ -50,74 +67,35 @@ export async function GET() {
     }
 
     const lastUpdatedAt =
-      data.bitcoin?.last_updated_at ||
-      data.ethereum?.last_updated_at ||
-      data.tether?.last_updated_at ||
+      data.bitcoin?.last_updated_at ??
+      data.ethereum?.last_updated_at ??
+      data.tether?.last_updated_at ??
       Math.floor(Date.now() / 1000);
+
+    const updatedAt = new Date(lastUpdatedAt * 1000).toISOString();
+
+    logger.info({ updatedAt }, 'Rates fetched successfully');
 
     return NextResponse.json(
       {
-        updatedAt: new Date(lastUpdatedAt * 1000).toISOString(),
-        disclaimer: 'Курс предварительный. Точные условия подтверждаются менеджером перед сделкой.',
+        updatedAt,
+        disclaimer:
+          'Курс предварительный. Точные условия подтверждаются менеджером перед сделкой.',
         rates: [
-          {
-            symbol: 'BTC',
-            label: 'Биткоин',
-            market: btc,
-            from: applyMarkup(btc, DEFAULT_MARKUPS.BTC),
-            markup: DEFAULT_MARKUPS.BTC,
-          },
-          {
-            symbol: 'ETH',
-            label: 'Эфир',
-            market: eth,
-            from: applyMarkup(eth, DEFAULT_MARKUPS.ETH),
-            markup: DEFAULT_MARKUPS.ETH,
-          },
-          {
-            symbol: 'USDT',
-            label: 'Тезер',
-            market: usdt,
-            from: applyMarkup(usdt, DEFAULT_MARKUPS.USDT),
-            markup: DEFAULT_MARKUPS.USDT,
-          },
-          {
-            symbol: 'LTC',
-            label: 'Лайткоин',
-            market: ltc,
-            from: applyMarkup(ltc, DEFAULT_MARKUPS.LTC),
-            markup: DEFAULT_MARKUPS.LTC,
-          },
-          {
-            symbol: 'TRX',
-            label: 'Трон',
-            market: trx,
-            from: applyMarkup(trx, DEFAULT_MARKUPS.TRX),
-            markup: DEFAULT_MARKUPS.TRX,
-          },
-          {
-            symbol: 'BNB',
-            label: 'BNB',
-            market: bnb,
-            from: applyMarkup(bnb, DEFAULT_MARKUPS.BNB),
-            markup: DEFAULT_MARKUPS.BNB,
-          },
+          { symbol: 'BTC', label: 'Биткоин', market: btc, from: applyMarkup(btc, MARKUPS.BTC), markup: MARKUPS.BTC },
+          { symbol: 'ETH', label: 'Эфир', market: eth, from: applyMarkup(eth, MARKUPS.ETH), markup: MARKUPS.ETH },
+          { symbol: 'USDT', label: 'Тезер', market: usdt, from: applyMarkup(usdt, MARKUPS.USDT), markup: MARKUPS.USDT },
+          { symbol: 'LTC', label: 'Лайткоин', market: ltc, from: applyMarkup(ltc, MARKUPS.LTC), markup: MARKUPS.LTC },
+          { symbol: 'TRX', label: 'Трон', market: trx, from: applyMarkup(trx, MARKUPS.TRX), markup: MARKUPS.TRX },
+          { symbol: 'BNB', label: 'BNB', market: bnb, from: applyMarkup(bnb, MARKUPS.BNB), markup: MARKUPS.BNB },
         ],
       },
       {
-        headers: {
-          'Cache-Control': 's-maxage=60, stale-while-revalidate=120',
-        },
+        headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=120' },
       }
     );
   } catch (error) {
-    console.error('Rates route error:', error);
-
-    return NextResponse.json(
-      {
-        error: 'Не удалось загрузить курсы',
-      },
-      { status: 503 }
-    );
+    logger.error({ error }, 'Rates route error');
+    return NextResponse.json({ error: 'Не удалось загрузить курсы' }, { status: 503 });
   }
 }
