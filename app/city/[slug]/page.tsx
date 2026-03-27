@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import Contact from '@/components/Contact';
+import ExchangeCalculator from '@/components/ExchangeCalculator';
 import FAQ from '@/components/FAQ';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
@@ -110,6 +111,8 @@ export default function CityPage({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </section>
+
+        <ExchangeCalculator city={city.name} />
 
         <section className="section-shell py-12">
           <div className="section-inner grid gap-6 md:grid-cols-3">
