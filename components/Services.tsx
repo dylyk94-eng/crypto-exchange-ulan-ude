@@ -1,6 +1,10 @@
+'use client';
+
 import { serviceGroups, processSteps as process } from '@/data/services';
+import { useRevealChildren } from '@/hooks/useReveal';
 
 export default function Services() {
+  const gridRef = useRevealChildren<HTMLDivElement>({ staggerMs: 100 });
   return (
     <section id="services" className="section-shell">
       <div className="section-inner">
@@ -10,14 +14,14 @@ export default function Services() {
             Услуги и процесс
           </div>
           <h2 className="display-title mt-6 max-w-3xl text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
-            Что мы делаем
+            Как устроен обмен
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
-            Основные услуги и порядок работы.
+            Три направления работы и понятный порядок действий — от заявки до завершения сделки.
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div ref={gridRef} className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div className="surface-accent reveal p-8" style={{ transitionDelay: '0.05s' }}>
             <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
               Как мы работаем

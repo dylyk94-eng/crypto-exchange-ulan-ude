@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <em>Премиальный криптообмен в Улан-Удэ и Чите с трендовым дизайном 2026 года</em>
+  <em>Премиальный криптообмен в Улан-Удэ с трендовым дизайном 2026 года</em>
 </p>
 
 ## ✨ Особенности
@@ -122,11 +122,9 @@ TELEGRAM_CHAT_ID=your_chat_id
 public/
 ├── cities/
 │   ├── ulan-ude.png
-│   ├── chita.png
 │   └── asia.png
 └── offices/
-    ├── ulan-ude-main.png
-    └── chita-main.png
+    └── ulan-ude-main.png
 ```
 
 ## 🎯 Компоненты

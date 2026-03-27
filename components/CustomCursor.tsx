@@ -112,8 +112,8 @@ export default function CustomCursor() {
         aria-hidden="true"
       >
         <div
-          className={`w-5 h-5 border-2 border-indigo-500 rounded-full transition-all duration-200 ${
-            isHovering ? 'w-7 h-7 border-pink-500 scale-150' : ''
+          className={`w-5 h-5 border-2 border-[rgba(15,118,110,0.7)] rounded-full transition-all duration-200 ${
+            isHovering ? 'w-7 h-7 border-[rgba(198,125,31,0.8)] scale-150' : ''
           }`}
         />
       </div>
@@ -128,7 +128,7 @@ export default function CustomCursor() {
         }}
         aria-hidden="true"
       >
-        <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full" />
+        <div className="w-1.5 h-1.5 bg-[rgba(15,118,110,0.8)] rounded-full" />
       </div>
     </>
   );

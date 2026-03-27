@@ -19,7 +19,7 @@ export default function FAQ() {
               Частые вопросы
             </h2>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
-              Коротко о сроках, курсе, формате встречи и том, как начинается работа.
+              Курс, сроки, минимальная сумма, безопасность и международные переводы.
             </p>
           </div>
 
@@ -32,9 +32,10 @@ export default function FAQ() {
                   key={faq.question}
                   className={`overflow-hidden rounded-[26px] border transition-all duration-300 ${
                     isOpen
-                      ? 'border-[rgba(17,94,89,0.14)] bg-[rgba(255,255,255,0.82)] shadow-[0_18px_42px_rgba(77,57,37,0.08)]'
+                      ? 'border-[rgba(15,118,110,0.22)] bg-[rgba(255,255,255,0.82)] shadow-[0_18px_42px_rgba(77,57,37,0.08)]'
                       : 'border-[rgba(73,53,35,0.08)] bg-[rgba(255,255,255,0.58)]'
                   }`}
+                  style={isOpen ? { borderLeftColor: 'var(--brand)', borderLeftWidth: '3px' } : undefined}
                 >
                   <button
                     type="button"
@@ -46,13 +47,13 @@ export default function FAQ() {
                       {faq.question}
                     </span>
                     <span
-                      className={`flex h-11 w-11 flex-none items-center justify-center rounded-full text-xl transition ${
+                      className={`flex h-11 w-11 flex-none items-center justify-center rounded-full text-xl transition-all duration-300 ${
                         isOpen
-                          ? 'bg-[rgba(15,118,110,0.12)] text-[rgba(17,94,89,0.94)]'
-                          : 'bg-[rgba(255,255,255,0.72)] text-[rgba(17,94,89,0.88)]'
+                          ? 'bg-[rgba(15,118,110,0.12)] text-[rgba(17,94,89,0.94)] rotate-45'
+                          : 'bg-[rgba(255,255,255,0.72)] text-[rgba(17,94,89,0.88)] rotate-0'
                       }`}
                     >
-                      {isOpen ? '\u2212' : '+'}
+                      +
                     </span>
                   </button>
 

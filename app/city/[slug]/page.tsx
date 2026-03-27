@@ -20,19 +20,6 @@ const cities = {
       rating: '4.9/5',
     },
   },
-  chita: {
-    name: 'Чита',
-    title: 'Криптообмен в Чите по предварительной заявке',
-    description:
-      'Для клиентов из Читы работаем по заявке: заранее подтверждаем сумму, направление обмена и формат связи.',
-    officeLabel: 'Работаем по согласованной заявке',
-    leadCta: 'Оставить заявку в Чите',
-    stats: {
-      clients: '2 000+',
-      transactions: '20 000+',
-      rating: '4.8/5',
-    },
-  },
 };
 
 const cityBenefits = [
@@ -200,6 +187,5 @@ export default function CityPage({ params }: { params: { slug: string } }) {
 export function generateStaticParams() {
   return [
     { slug: 'ulan-ude' },
-    { slug: 'chita' },
   ];
 }

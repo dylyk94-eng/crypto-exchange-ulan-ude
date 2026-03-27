@@ -60,7 +60,7 @@ export default function Header() {
           </div>
           <div>
             <p className="text-sm font-black text-[rgba(36,28,20,0.96)]">Криптообмен</p>
-            <p className="text-xs text-[rgba(84,68,53,0.72)]">Офлайн обмен и переводы</p>
+            <p className="text-xs text-[rgba(84,68,53,0.72)]">Крипто за наличные в Улан-Удэ</p>
           </div>
         </Link>
 

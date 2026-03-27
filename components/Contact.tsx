@@ -25,12 +25,6 @@ const offices = [
     schedule: 'Ежедневно, 12:00-18:00',
     details: 'Подходит для стандартных обменов и личной консультации.',
   },
-  {
-    city: 'Чита',
-    address: 'По предварительной заявке',
-    schedule: 'Время согласовывается с менеджером',
-    details: 'Для клиентов, которым нужен гибкий формат и персональная координация.',
-  },
 ];
 
 export default function Contact() {
@@ -126,13 +120,13 @@ export default function Contact() {
         <div className="section-head reveal">
           <div className="eyebrow">
             <span className="eyebrow-dot" />
-            Контакт и заявка
+            Оставить заявку
           </div>
           <h2 className="max-w-3xl text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
-            Оставьте заявку или напишите в Telegram
+            Готовы обменять? Напишите нам
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
-            Оставьте основные данные, и мы свяжемся с вами.
+            Укажите валюту и сумму — менеджер свяжется с вами, подтвердит курс и назначит время встречи.
           </p>
         </div>
 
@@ -146,7 +140,7 @@ export default function Contact() {
                 Быстрее всего через Telegram
               </h3>
               <p className="mt-4 text-base leading-7 text-muted">
-                Если хотите сразу обсудить сумму, валюту или формат сделки, напишите в Telegram.
+                Напишите — ответим за несколько минут. Сразу обсудим сумму, курс и удобное время.
               </p>
               <a
                 href="https://t.me/Crypto_u_u"
@@ -199,17 +193,18 @@ export default function Contact() {
             </div>
 
             {submitStatus === 'success' && (
-              <div className="mb-5 rounded-2xl border border-[rgba(47,133,90,0.22)] bg-[rgba(47,133,90,0.1)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
+              <div className="toast-enter mb-5 rounded-2xl border border-[rgba(47,133,90,0.22)] bg-[rgba(47,133,90,0.1)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
                 Заявка отправлена. Менеджер свяжется с вами в ближайшее время.
               </div>
             )}
             {submitStatus === 'demo' && (
-              <div className="mb-5 rounded-2xl border border-[rgba(217,119,6,0.22)] bg-[rgba(217,119,6,0.1)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
-                Сейчас включен demo-режим. Заявка записана локально и показана в консоли сервера.
+              <div className="toast-enter mb-5 rounded-2xl border border-[rgba(217,119,6,0.22)] bg-[rgba(217,119,6,0.1)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
+                Уведомления временно не настроены. Для связи напишите нам напрямую в{' '}
+                <a href="https://t.me/Crypto_u_u" target="_blank" rel="noopener noreferrer" className="font-medium underline">Telegram</a>.
               </div>
             )}
             {submitStatus === 'error' && (
-              <div className="mb-5 rounded-2xl border border-[rgba(185,28,28,0.18)] bg-[rgba(185,28,28,0.08)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
+              <div className="toast-enter mb-5 rounded-2xl border border-[rgba(185,28,28,0.18)] bg-[rgba(185,28,28,0.08)] px-4 py-3 text-sm text-[rgba(31,26,20,0.84)]">
                 Не удалось отправить заявку. Попробуйте еще раз или свяжитесь с нами в Telegram.
               </div>
             )}
@@ -227,7 +222,6 @@ export default function Contact() {
                   className="input-base"
                 >
                   <option value="Улан-Удэ">Улан-Удэ</option>
-                  <option value="Чита">Чита</option>
                 </select>
               </div>
 
@@ -333,7 +327,8 @@ export default function Contact() {
 
               <div className="md:col-span-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <p className="text-sm leading-6 text-muted">
-                  Отправляя форму, вы соглашаетесь на обратную связь по указанным контактам.
+                  Отправляя форму, вы соглашаетесь с{' '}
+                  <a href="/privacy" className="underline hover:text-[rgba(17,94,89,1)]">политикой конфиденциальности</a>.
                 </p>
                 <button type="submit" className="btn-primary min-w-[12rem]" disabled={isSubmitting}>
                   {isSubmitting ? 'Отправка...' : 'Отправить заявку'}

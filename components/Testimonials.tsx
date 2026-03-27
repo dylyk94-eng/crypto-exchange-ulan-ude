@@ -1,6 +1,7 @@
 'use client';
 
 import { testimonials } from '@/data/testimonials';
+import { useRevealChildren } from '@/hooks/useReveal';
 
 function renderStars(count: number) {
   return Array.from({ length: count }).map((_, star) => (
@@ -11,6 +12,8 @@ function renderStars(count: number) {
 }
 
 export default function Testimonials() {
+  const gridRef = useRevealChildren<HTMLDivElement>({ staggerMs: 100 });
+
   return (
     <section className="section-shell">
       <div className="section-inner">
@@ -23,34 +26,44 @@ export default function Testimonials() {
             Что говорят клиенты
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
-            Реальные отзывы клиентов о скорости, коммуникации и прозрачности условий.
+            Отзывы клиентов об обмене, сопровождении и работе с международными переводами.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div ref={gridRef} className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <article
               key={`${testimonial.name}-${testimonial.note}`}
-              className="reveal rounded-[30px] border border-[rgba(73,53,35,0.08)] bg-[rgba(255,255,255,0.66)] p-6"
+              className={`testimonial-card rounded-[30px] border border-[rgba(73,53,35,0.08)] p-6 ${
+                index % 2 === 0
+                  ? 'bg-[rgba(255,255,255,0.66)]'
+                  : 'bg-[rgba(255,252,247,0.78)]'
+              }`}
+              style={{ '--tw-shadow': 'var(--shadow-soft)' } as React.CSSProperties}
             >
               <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="text-2xl font-semibold text-[rgba(31,26,20,0.95)]">{testimonial.name}</div>
-                  <div className="mt-3 flex gap-1 text-[rgba(217,119,6,0.95)]">{renderStars(testimonial.rating)}</div>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-gradient-to-br from-[rgba(15,118,110,0.8)] to-[rgba(198,125,31,0.8)] text-sm font-bold text-white">
+                    {testimonial.name[0]}
+                  </div>
+                  <div>
+                    <div className="text-lg font-semibold text-[rgba(31,26,20,0.95)]">{testimonial.name}</div>
+                    <div className="flex gap-1 text-sm text-[rgba(217,119,6,0.95)]">{renderStars(testimonial.rating)}</div>
+                  </div>
                 </div>
                 <div className="rounded-full border border-[rgba(73,53,35,0.08)] bg-[rgba(255,255,255,0.72)] px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-[rgba(17,94,89,0.82)]">
                   Отзыв
                 </div>
               </div>
 
-              <p className="mt-6 text-base leading-8 text-[rgba(31,26,20,0.84)]">
+              <p className="mt-5 text-base leading-8 text-[rgba(31,26,20,0.84)]">
                 {testimonial.text}
               </p>
 
-              <div className="mt-8 flex items-center justify-between gap-4 border-t border-[rgba(73,53,35,0.08)] pt-4">
+              <div className="mt-6 flex items-center justify-between gap-4 border-t border-[rgba(73,53,35,0.08)] pt-4">
                 <div className="text-sm font-medium text-[rgba(17,94,89,0.86)]">{testimonial.note}</div>
                 <div className="text-xs uppercase tracking-[0.18em] text-[rgba(106,90,73,0.66)]">
-                  Проверено
+                  Клиент
                 </div>
               </div>
             </article>

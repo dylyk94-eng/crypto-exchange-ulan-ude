@@ -11,13 +11,14 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="site-footer mt-10 border-t border-[rgba(73,53,35,0.08)] bg-[rgba(246,239,229,0.96)] text-[rgba(84,68,53,0.8)]">
+    <footer className="site-footer mt-10 bg-[rgba(246,239,229,0.96)] text-[rgba(84,68,53,0.8)]">
+      <div className="footer-separator" />
       <div className="mx-auto grid max-w-[74rem] gap-10 p-6 md:grid-cols-3 md:p-10">
         <div>
           <h2 className="text-lg font-bold text-[rgba(36,28,20,0.96)]">Криптообмен</h2>
-          <p className="mt-3 text-sm">Офлайн обмен USDT, BTC и ETH, а также переводы за рубеж по согласованию.</p>
+          <p className="mt-3 text-sm">Покупка и продажа криптовалюты за наличные в Улан-Удэ. Международные переводы.</p>
           <p className="mt-4 text-xs text-[rgba(84,68,53,0.62)]">© {year} Криптообмен. Все права защищены.</p>
-          <Link href="/privacy" className="mt-2 block text-xs text-[rgba(84,68,53,0.62)] hover:text-[rgba(17,94,89,1)]">
+          <Link href="/privacy" className="footer-link mt-2 block text-xs text-[rgba(84,68,53,0.62)]">
             Политика конфиденциальности
           </Link>
         </div>
@@ -27,7 +28,7 @@ export default function Footer() {
           <ul className="mt-3 space-y-2 text-sm">
             {navItems.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="hover:text-[rgba(17,94,89,1)]">
+                <Link href={item.href} className="footer-link">
                   {item.label}
                 </Link>
               </li>
@@ -38,13 +39,13 @@ export default function Footer() {
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-widest text-[rgba(17,94,89,0.88)]">Контакты</h3>
           <div className="mt-3 space-y-2 text-sm">
-            <a href="https://t.me/Crypto_u_u" target="_blank" rel="noreferrer" className="block hover:text-[rgba(17,94,89,1)]">
+            <a href="https://t.me/Crypto_u_u" target="_blank" rel="noreferrer" className="footer-link block">
               Telegram: @Crypto_u_u
             </a>
-            <a href="tel:+79999999999" className="block hover:text-[rgba(17,94,89,1)]">
+            <a href="tel:+79999999999" className="footer-link block">
               Телефон: +7 (999) 999-99-99
             </a>
-            <a href="mailto:info@cryptoexchange.ru" className="block hover:text-[rgba(17,94,89,1)]">
+            <a href="mailto:info@cryptoexchange.ru" className="footer-link block">
               Почта: info@cryptoexchange.ru
             </a>
           </div>
