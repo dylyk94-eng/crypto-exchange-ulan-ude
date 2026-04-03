@@ -48,7 +48,21 @@ export default function Hero() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </a>
-              <Link href="#contact" className="btn-secondary">
+              <Link 
+                href="#contact" 
+                className="btn-secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const element = document.getElementById('contact');
+                  if (element) {
+                    const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - 80;
+                    window.scrollTo({
+                      top: offsetTop,
+                      behavior: 'smooth'
+                    });
+                  }
+                }}
+              >
                 Оставить заявку
               </Link>
             </div>

@@ -115,7 +115,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="section-shell">
+    <section id="contact" className="section-shell" tabIndex={-1}>
       <div className="section-inner">
         <div className="section-head reveal">
           <div className="eyebrow">
