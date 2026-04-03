@@ -27,6 +27,34 @@
     box-sizing: border-box;
   }
 
+  /* Mobile-first base styles */
+  body {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Fluid typography helpers */
+  .fluid-text {
+    font-size: clamp(16px, 4vw, 24px);
+    line-height: 1.5;
+  }
+
+  .fluid-title {
+    font-size: clamp(24px, 6vw, 40px);
+    line-height: 1.2;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .fluid-heading {
+    font-size: clamp(20px, 5vw, 36px);
+    line-height: 1.3;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -154,8 +182,43 @@
 
   /* ── Layout ────────────────────────────────────────────────────────── */
 
+  /* Responsive container */
+  .container {
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
   .section-shell {
-    padding: 4rem 1.25rem;
+    padding: 4rem 1rem;
+  }
+
+  .section-inner {
+    width: 100%;
+    max-width: 74rem;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Fluid max-width for components */
+  .fluid-max {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .fluid-max-md {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .fluid-max-lg {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
   }
 
   .section-tint {

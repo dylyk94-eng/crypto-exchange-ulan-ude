@@ -104,7 +104,7 @@ export default function Calculator() {
             <span className="eyebrow-dot" />
             Калькулятор
           </div>
-          <h2 className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)] md:text-3xl lg:text-4xl">
+          <h2 className="mt-3 fluid-heading font-semibold text-[rgba(31,26,20,0.95)] md:text-3xl lg:text-4xl">
             Рассчитать обмен
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-muted">

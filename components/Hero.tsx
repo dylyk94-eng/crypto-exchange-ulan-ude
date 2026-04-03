@@ -32,11 +32,11 @@ export default function Hero() {
               Офлайн-обмен криптовалюты
             </div>
 
-            <h1 className="display-title mt-6 max-w-4xl text-5xl font-semibold leading-[0.98] text-[rgba(31,26,20,0.96)] md:text-7xl">
+            <h1 className="display-title mt-6 max-w-4xl fluid-heading font-semibold leading-[0.98] text-[rgba(31,26,20,0.96)] md:text-5xl lg:text-7xl">
               Обмен криптовалюты в <span className="gradient-text">Улан-Удэ</span>
             </h1>
 
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-[rgba(106,90,73,0.92)] md:text-xl">
+            <p className="mt-6 max-w-3xl fluid-text text-[rgba(106,90,73,0.92)] md:text-lg lg:text-xl">
               Покупка и продажа криптовалюты за наличные. Курс и условия
               согласуем до встречи — без скрытых комиссий и сюрпризов.
             </p>

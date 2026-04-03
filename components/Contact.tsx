@@ -122,7 +122,7 @@ export default function Contact() {
             <span className="eyebrow-dot" />
             Оставить заявку
           </div>
-          <h2 className="max-w-3xl text-4xl font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-5xl">
+          <h2 className="max-w-3xl fluid-heading font-semibold leading-tight text-[rgba(31,26,20,0.95)] md:text-4xl lg:text-5xl">
             Готовы обменять? Напишите нам
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-muted">
