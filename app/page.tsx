@@ -6,7 +6,7 @@ import Calculator from '@/components/Calculator';
 import Cities from '@/components/Cities';
 import Services from '@/components/Services';
 import Testimonials from '@/components/Testimonials';
-import FAQ from '@/components/FAQ';
+// import FAQ from '@/components/FAQ';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 
@@ -18,12 +18,12 @@ export default function Home() {
 
       <main id="main" className="relative" tabIndex={-1}>
         <Hero />
-        <CryptoRates />
+        {/* <CryptoRates /> */}
         <Calculator />
         <Cities />
         <Services />
         <Testimonials />
-        <FAQ />
+        {/* <FAQ /> */}
         <Contact />
       </main>
 

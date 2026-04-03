@@ -196,7 +196,8 @@ export default function Calculator() {
                 </div>
               ) : selectedRate ? (
                 <>
-                  <div className="text-sm font-medium text-muted">Вы получите</div>
+                  <div className="text-sm font-medium text-muted">Приблизительная сумма</div>
+                  <div className="text-xs text-muted mt-1">Вы получите</div>
                   <div className="mt-3 text-4xl font-semibold text-[rgba(31,26,20,0.95)]">
                     {activeField === 'crypto' ? (
                       <AnimatedResult value={parseFloat(rubAmount) || 0} suffix=" ₽" decimals={0} />
