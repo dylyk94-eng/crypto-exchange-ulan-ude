@@ -760,7 +760,81 @@
   body.theme-dark .site-footer a:hover { color: #7ff1dc !important; }
 }
 
-/* ── Responsive ──────────────────────────────────────────────────────── */
+/* ── Mobile-first responsive improvements ───────────────────────────────── */
+
+/* Mobile specific improvements */
+@media (max-width: 767px) {
+  /* Better touch targets for mobile */
+  .btn-primary,
+  .btn-secondary {
+    min-height: 44px;
+    min-width: 120px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  /* Improved form inputs for mobile */
+  .input-base {
+    padding: 0.875rem 1rem;
+    font-size: 16px; /* Prevents zoom on iOS */
+    min-height: 48px;
+  }
+
+  /* Better spacing for mobile sections */
+  .section-shell {
+    padding: 3rem 1rem;
+  }
+
+  /* Optimized card padding for mobile */
+  .surface {
+    padding: 1.25rem;
+  }
+  .surface-soft {
+    padding: 1.125rem;
+  }
+  .surface-strong {
+    padding: 1.5rem;
+  }
+
+  /* Better form labels for mobile */
+  .field-label {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Improved eyebrow/kicker for mobile */
+  .eyebrow {
+    font-size: 0.72rem;
+    margin-bottom: 0.875rem;
+  }
+
+  /* Better mobile typography */
+  h2 {
+    font-size: 1.75rem;
+    line-height: 1.25;
+  }
+
+  /* Improved touch targets for links */
+  a, button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Optimized spacing for mobile grid */
+  .grid {
+    gap: 1rem;
+  }
+
+  /* Better card hover states for mobile (disable hover) */
+  .surface:hover,
+  .surface-soft:hover,
+  .surface-accent:hover,
+  .rate-card:hover {
+    transform: none;
+  }
+}
 
 @media (min-width: 768px) {
   .section-shell { padding: 5rem 2rem; }

@@ -42,12 +42,16 @@ export default function Footer() {
             <a href="https://t.me/Crypto_u_u" target="_blank" rel="noreferrer" className="footer-link block">
               Telegram: @Crypto_u_u
             </a>
-            <a href="tel:+79999999999" className="footer-link block">
-              Телефон: +7 (999) 999-99-99
-            </a>
-            <a href="mailto:info@cryptoexchange.ru" className="footer-link block">
-              Почта: info@cryptoexchange.ru
-            </a>
+            {!process.env.HIDE_CONTACTS && (
+              <>
+                <a href="tel:+79999999999" className="footer-link block">
+                  Телефон: +7 (999) 999-99-99
+                </a>
+                <a href="mailto:info@cryptoexchange.ru" className="footer-link block">
+                  Почта: info@cryptoexchange.ru
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>

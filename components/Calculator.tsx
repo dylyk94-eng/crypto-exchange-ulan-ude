@@ -99,12 +99,12 @@ export default function Calculator() {
   return (
     <section className="section-shell">
       <div className="section-inner">
-        <div ref={sectionRef} className="surface-strong reveal p-8 md:p-10">
+        <div ref={sectionRef} className="surface-strong reveal p-6 md:p-10">
           <div className="eyebrow">
             <span className="eyebrow-dot" />
             Калькулятор
           </div>
-          <h2 className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.95)] md:text-4xl">
+          <h2 className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)] md:text-3xl lg:text-4xl">
             Рассчитать обмен
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
@@ -112,7 +112,7 @@ export default function Calculator() {
           </p>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2">
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div>
                 <label htmlFor="calc-crypto" className="field-label">
                   Криптовалюта
@@ -160,7 +160,7 @@ export default function Calculator() {
                       handleCryptoChange(cryptoAmount);
                     }
                   }}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(73,53,35,0.12)] bg-[rgba(255,255,255,0.7)] text-muted transition hover:border-[rgba(15,118,110,0.3)] hover:text-[rgba(17,94,89,0.9)]"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(73,53,35,0.12)] bg-[rgba(255,255,255,0.7)] text-muted transition hover:border-[rgba(15,118,110,0.3)] hover:text-[rgba(17,94,89,0.9)] active:scale-[0.98] md:h-10 md:w-10"
                   aria-label="Поменять направление"
                 >
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,7 +198,7 @@ export default function Calculator() {
                 <>
                   <div className="text-sm font-medium text-muted">Приблизительная сумма</div>
                   <div className="text-xs text-muted mt-1">Вы получите</div>
-                  <div className="mt-3 text-4xl font-semibold text-[rgba(31,26,20,0.95)]">
+                  <div className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.95)] md:text-4xl">
                     {activeField === 'crypto' ? (
                       <AnimatedResult value={parseFloat(rubAmount) || 0} suffix=" ₽" decimals={0} />
                     ) : (
