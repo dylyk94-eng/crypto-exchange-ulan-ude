@@ -64,9 +64,9 @@ export default function Header() {
             alt="Логотип"
             className="h-10 w-10 rounded-full object-cover shadow-[0_12px_28px_rgba(17,94,89,0.22)] md:h-11 md:w-11"
           />
-          <div className="hidden sm:block">
-            <p className="text-sm font-black text-[rgba(36,28,20,0.96)]">Криптообмен</p>
-            <p className="text-xs text-[rgba(84,68,53,0.72)]">Крипто за наличные в Улан-Удэ</p>
+          <div>
+            <p className="text-sm font-black text-[rgba(36,28,20,0.96)] sm:text-base">Криптообмен</p>
+            <p className="text-xs text-[rgba(84,68,53,0.72)] hidden sm:block">Крипто за наличные в Улан-Удэ</p>
           </div>
         </Link>
 
