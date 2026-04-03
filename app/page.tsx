@@ -1,10 +1,10 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import CryptoRates from '@/components/CryptoRates';
+// import CryptoRates from '@/components/CryptoRates'; // временно скрыто
 import Cities from '@/components/Cities';
 import Services from '@/components/Services';
 import Testimonials from '@/components/Testimonials';
-import FAQ from '@/components/FAQ';
+// import FAQ from '@/components/FAQ'; // временно скрыто
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 
@@ -15,11 +15,11 @@ export default function Home() {
 
       <main id="main" className="relative" tabIndex={-1}>
         <Hero />
-        <CryptoRates />
+        {/* <CryptoRates /> */}
         <Cities />
         <Services />
         <Testimonials />
-        <FAQ />
+        {/* <FAQ /> */}
         <Contact />
       </main>
 

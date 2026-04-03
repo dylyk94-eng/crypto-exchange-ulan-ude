@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Contact from '@/components/Contact';
 import ExchangeCalculator from '@/components/ExchangeCalculator';
-import FAQ from '@/components/FAQ';
+// import FAQ from '@/components/FAQ'; // временно скрыто
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import Services from '@/components/Services';
@@ -175,7 +175,7 @@ export default function CityPage({ params }: { params: { slug: string } }) {
 
         <Services />
         <Testimonials />
-        <FAQ />
+        {/* <FAQ /> */}
         <Contact />
 
         <section className="section-shell pt-8">

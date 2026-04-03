@@ -1,0 +1,23 @@
+
+> crypto-exchange@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3001
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3.8s
+ ○ Compiling / ...
+ ✓ Compiled / in 4.2s (584 modules)
+ GET / 200 in 4550ms
+ ✓ Compiled in 512ms (276 modules)
+ GET / 200 in 73ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 674ms (573 modules)
+ GET /logos/telegram.png 404 in 812ms
+ GET /logos/telegram-icon.png 404 in 657ms
+ ✓ Compiled /favicon.ico in 371ms (341 modules)
+ GET /favicon.ico 200 in 479ms
+ GET /favicon.ico 200 in 10ms
+ GET /favicon.ico 200 in 9ms

@@ -122,7 +122,7 @@ export default function ExchangeCalculator({ city }: { city: string }) {
                 Обменять средства
               </h3>
               <p className="text-base leading-7 text-muted">
-                Курс обновляется автоматически. Значение предварительное, точные условия менеджер подтвердит перед сделкой.
+                Курс обновляется автоматически. Точные условия менеджер подтвердит перед сделкой.
               </p>
               <div className="rounded-[22px] border border-[rgba(73,53,35,0.12)] bg-[rgba(255,255,255,0.62)] px-4 py-4 text-sm font-medium text-[rgba(31,26,20,0.82)]">
                 {loadingRates ? 'Обновляем курс...' : `1 ${selectedRate.symbol} = ${rateFormatter.format(selectedRate.from)} RUB`}
@@ -156,7 +156,10 @@ export default function ExchangeCalculator({ city }: { city: string }) {
               </div>
 
               <div className="surface-strong p-5 md:p-6">
-                <label className="field-label">Получаете</label>
+                <div className="flex items-center justify-between gap-2">
+                  <label className="field-label">Получаете</label>
+                  <span className="text-xs font-medium uppercase tracking-wider text-[rgba(17,94,89,0.64)]">приблизительная сумма</span>
+                </div>
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,0.44fr)_minmax(0,0.56fr)]">
                   <select
                     className="input-base"

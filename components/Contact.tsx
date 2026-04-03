@@ -138,24 +138,48 @@ export default function Contact() {
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
           <div className="space-y-6">
-            <div className="surface reveal">
-              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
-                Канал связи
+            <div className="surface reveal relative overflow-hidden">
+              <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-10" style={{ backgroundColor: '#229ED9' }}></div>
+              <div className="absolute -left-8 bottom-0 h-32 w-32 rounded-full opacity-8" style={{ backgroundColor: '#229ED9' }}></div>
+              
+              <div className="relative">
+                <div className="flex items-center gap-3">
+                  {/* Telegram логотип */}
+                  <img 
+                    src="/logos/telegram.png" 
+                    alt="Telegram"
+                    className="h-12 w-auto"
+                    width={48}
+                    height={48}
+                  />
+                  <div className="text-sm font-medium uppercase tracking-[0.18em]" style={{ color: '#229ED9' }}>
+                    Быстрый контакт
+                  </div>
+                </div>
+                <h3 className="mt-4 text-3xl font-semibold text-[rgba(31,26,20,0.95)]">
+                  Напишите нам в Telegram
+                </h3>
+                <p className="mt-4 text-base leading-7 text-muted">
+                  Если хотите сразу обсудить сумму, валюту или формат сделки, напишите в Telegram — отвечаем оперативно.
+                </p>
+                <a
+                  href="https://t.me/Crypto_u_u"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary mt-6 inline-flex items-center gap-2"
+                  style={{ backgroundColor: '#229ED9' }}
+                >
+                  {/* Telegram иконка */}
+                  <img 
+                    src="/logos/telegram-icon.png" 
+                    alt="Telegram"
+                    className="h-5 w-auto"
+                    width={20}
+                    height={20}
+                  />
+                  Открыть Telegram
+                </a>
               </div>
-              <h3 className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.95)]">
-                Быстрее всего через Telegram
-              </h3>
-              <p className="mt-4 text-base leading-7 text-muted">
-                Если хотите сразу обсудить сумму, валюту или формат сделки, напишите в Telegram.
-              </p>
-              <a
-                href="https://t.me/Crypto_u_u"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary mt-6"
-              >
-                Открыть Telegram
-              </a>
             </div>
 
             {offices.map((office, index) => (
