@@ -20,9 +20,7 @@ export default function Header() {
     const initial: 'light' | 'dark' =
       saved === 'dark' || saved === 'light'
         ? saved
-        : window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light';
+        : 'light'; // Always default to light theme, don't follow system preference
 
     setTheme(initial);
     document.body.classList.toggle('theme-dark', initial === 'dark');

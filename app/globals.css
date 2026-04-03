@@ -347,6 +347,20 @@
     color: var(--ink);
     outline: none;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    /* Mobile-specific fixes */
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-touch-callout: none;
+    /* Prevent number inputs from having spinner controls */
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    /* Android-specific touch optimization */
+    &::placeholder {
+      color: rgba(84, 68, 53, 0.56);
+    }
   }
   .input-base::placeholder { color: rgba(84, 68, 53, 0.56); }
   .input-base:focus {
@@ -761,6 +775,57 @@
 }
 
 /* ── Mobile-first responsive improvements ───────────────────────────────── */
+
+/* Android-specific fixes */
+@media (max-width: 767px) {
+  /* Fix Android button rendering */
+  button, .btn-primary, .btn-secondary {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Fix Android form input rendering */
+  .input-base {
+    -webkit-appearance: none;
+    appearance: none;
+    /* Remove Android's default input styling */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
+  /* Fix Android touch targets */
+  .btn-primary,
+  .btn-secondary {
+    touch-action: manipulation;
+  }
+
+  /* Prevent Android from scaling text when rotating */
+  body {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+}
+
+/* iOS-specific improvements */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific touch optimization */
+  .btn-primary,
+  .btn-secondary {
+    touch-action: manipulation;
+  }
+
+  /* Prevent iOS rubber banding on overflow containers */
+  .surface,
+  .surface-soft,
+  .surface-strong {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+}
 
 /* Mobile specific improvements */
 @media (max-width: 767px) {

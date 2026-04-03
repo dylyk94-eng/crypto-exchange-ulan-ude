@@ -30,6 +30,13 @@ export const metadata: Metadata = {
       'Покупка и продажа криптовалюты за наличные. Курс фиксируем до встречи, обмен от 15 минут.',
     type: 'website',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
+  themeColor: '#f6f1e8',
 };
 
 export default function RootLayout({
