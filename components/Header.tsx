@@ -55,9 +55,11 @@ export default function Header() {
         className={`mx-auto flex max-w-[74rem] items-center justify-between px-4 py-4 transition md:px-8 ${isScrolled ? 'shadow-[0_16px_36px_rgba(77,57,37,0.08)]' : ''}`}
       >
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,#115e59,#c67d1f)] text-base font-bold text-white shadow-[0_12px_28px_rgba(17,94,89,0.22)]">
-            К
-          </div>
+          <img
+            src="/logos/logo.png"
+            alt="Логотип"
+            className="h-11 w-11 rounded-full object-cover shadow-[0_12px_28px_rgba(17,94,89,0.22)]"
+          />
           <div>
             <p className="text-sm font-black text-[rgba(36,28,20,0.96)]">Криптообмен</p>
             <p className="text-xs text-[rgba(84,68,53,0.72)]">Крипто за наличные в Улан-Удэ</p>
