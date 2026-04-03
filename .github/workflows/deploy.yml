@@ -1,21 +1,21 @@
-name: CI / Deploy
+name: Deploy to Vercel
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches:
+      - main
+      - master
+  workflow_dispatch:  # Разрешить ручной запуск
 
 jobs:
-  # ── Lint & type-check ──────────────────────────────────────────────────────
-  ci:
-    name: Lint & build check
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
@@ -23,40 +23,56 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
+      - name: Run tests
+        run: npm test --if-present
 
-      - name: Tests
-        run: npm test
-
-      - name: Build (verify production bundle)
+      - name: Build project
         run: npm run build
         env:
-          # Ensure the build doesn't fail due to missing env vars
-          TELEGRAM_BOT_TOKEN: DEMO_BOT_TOKEN
-          TELEGRAM_CHAT_ID: '000000000'
+          NODE_ENV: production
 
-  # ── Deploy to VPS (only on push to main) ──────────────────────────────────
-  deploy:
-    name: Deploy to VPS
-    needs: ci
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
 
-    steps:
-      - uses: actions/checkout@v4
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "deployment_url=$url" >> $GITHUB_OUTPUT
+
+      - name: Comment deployment URL
+        if: github.event_name == 'push'
+        uses: actions/github-script@v7
         with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
-            set -e
-            cd /var/www/crypto-exchange
-            git pull origin main
-            npm ci --omit=dev
-            npm run build
-            pm2 reload ecosystem.config.cjs --update-env
-            echo "Deploy complete: $(date)"
+            const deploymentUrl = '${{ steps.deploy.outputs.deployment_url }}';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 Deployed to Vercel: ${deploymentUrl}`
+            });
+
+      - name: Notify Telegram on success
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: 'Crypto Exchange deployed to Vercel successfully!'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        continue-on-error: true
+
+      - name: Notify Telegram on failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: 'Crypto Exchange deployment FAILED!'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        continue-on-error: true

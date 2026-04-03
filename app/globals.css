@@ -926,3 +926,37 @@
   .hero-blob { animation: none; }
   .toast-enter { animation: none; }
 }
+
+/* ── Mobile word wrapping fixes ──────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Force long words to wrap properly */
+ .mobile-word-wrap {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+  }
+  
+  /* Adaptive font sizes for long words */
+ .mobile-adaptive-text {
+    font-size: clamp(0.85rem, 3vw + 0.5rem, 1rem);
+  }
+  
+  /* Apply word-wrap to text elements on mobile */
+  h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  p, span, div {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Prevent horizontal overflow */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}

@@ -1,0 +1,27 @@
+# Vercel ignore patterns
+node_modules/
+.next/
+.cache/
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.vercel/
+.git/
+coverage/
+dist/
+build/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+**/__tests__/**
+**/test/**
+tests/
+*.md
+!README.md
+.editorconfig
+.eslintrc*
+.prettierrc*

@@ -143,7 +143,7 @@ export default function Contact() {
                 Напишите — ответим за несколько минут. Сразу обсудим сумму, курс и удобное время.
               </p>
               <a
-                href="https://t.me/Crypto_u_u"
+                href="https://t.me/share/url?url=https://t.me/Crypto_u_u&text=Здравствуйте, хочу обменять криптовалюту"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#229ED9] px-6 py-3 text-white transition hover:bg-[#1A8BCA] font-semibold"

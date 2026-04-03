@@ -48,15 +48,17 @@ export default function Services() {
                   Направление {index + 1}
                 </div>
                 <h3 className="mt-3 text-2xl font-semibold text-[rgba(31,26,20,0.95)]">{group.title}</h3>
-                <p className="mt-4 text-base leading-7 text-muted">{group.description}</p>
+                <p 
+                  className="mt-4 text-base leading-7 text-muted"
+                  dangerouslySetInnerHTML={{ __html: group.description }}
+                />
                 <ul className="mt-6 grid gap-3 md:grid-cols-3">
                   {group.points.map((point) => (
                     <li
                       key={point}
                       className="rounded-[20px] border border-[rgba(73,53,35,0.08)] bg-[rgba(255,255,255,0.55)] px-4 py-3 text-sm leading-6 text-[rgba(31,26,20,0.84)]"
-                    >
-                      {point}
-                    </li>
+                      dangerouslySetInnerHTML={{ __html: point }}
+                    />
                   ))}
                 </ul>
               </article>

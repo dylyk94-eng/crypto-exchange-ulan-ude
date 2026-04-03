@@ -21,6 +21,12 @@ const config = {
           '50%': { opacity: '0.5' },
         },
       },
+      wordBreak: {
+        'normal': 'normal',
+        'words': 'break-word',
+        'all': 'break-all',
+        'keep': 'keep-all',
+      },
     },
   },
   plugins: [],
