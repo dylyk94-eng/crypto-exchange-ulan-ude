@@ -63,8 +63,8 @@ export default function Header() {
             className="h-10 w-10 rounded-full object-cover shadow-[0_12px_28px_rgba(17,94,89,0.22)] md:h-11 md:w-11"
           />
           <div>
-            <p className="text-sm font-black text-[rgba(36,28,20,0.96)] sm:text-base">Криптообмен</p>
-            <p className="text-xs text-[rgba(84,68,53,0.72)]">Крипто за наличные в Улан-Удэ</p>
+            <p className="text-sm font-black text-[rgba(17,94,89,0.95)] sm:text-base">Криптообмен</p>
+            <p className="text-xs text-[rgba(217,119,6,0.82)]">Крипто за наличные в Улан-Удэ</p>
           </div>
         </Link>
 
