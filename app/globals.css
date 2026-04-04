@@ -100,6 +100,12 @@
   }
 }
 
+/* ── Targeted hide for Telegram reviews link in Testimonials ───────────── */
+/* Hides an inline text link styled as subtle text (not buttons) */
+.section-shell .section-inner .mt-8.text-center a.inline-flex.items-center.gap-2.text-sm.font-medium.text-\[rgba\(17,94,89,0\.88\)\] {
+  display: none !important;
+}
+
 /* ── Keyframes ─────────────────────────────────────────────────────────── */
 
 @keyframes fade-up {

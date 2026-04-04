@@ -21,7 +21,12 @@ if (typeof window !== 'undefined') {
         const targetElement = document.getElementById(targetId || '');
         
         if (targetElement) {
-          const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80; // Header height offset
+          // Динамический offset на основе высоты header
+          const header = document.querySelector('header');
+          const headerHeight = header ? header.getBoundingClientRect().height : 80;
+          // На мобильных добавляем дополнительный отступ
+          const extraOffset = window.innerWidth < 768 ? 10 : 0;
+          const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight - extraOffset;
           window.scrollTo({
             top: offsetTop,
             behavior: 'smooth'
@@ -45,7 +50,12 @@ if (typeof window !== 'undefined') {
           const targetElement = document.getElementById(targetId || '');
           
           if (targetElement) {
-            const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - 80; // Account for header height
+            // Динамический offset на основе высоты header
+            const header = document.querySelector('header');
+            const headerHeight = header ? header.getBoundingClientRect().height : 80;
+            // На мобильных добавляем дополнительный отступ
+            const extraOffset = window.innerWidth < 768 ? 10 : 0;
+            const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight - extraOffset;
             window.scrollTo({
               top: offsetTop,
               behavior: 'smooth'

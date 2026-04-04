@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const navItems = [
+  { href: '#calc-crypto', label: 'Калькулятор' },
   { href: '#office', label: 'Офис' },
   { href: '#services', label: 'Услуги' },
   { href: '#contact', label: 'Контакты' },
-  { href: '#faq', label: 'Вопросы' },
 ];
 
 export default function Header() {
@@ -64,7 +64,7 @@ export default function Header() {
           />
           <div>
             <p className="text-sm font-black text-[rgba(36,28,20,0.96)] sm:text-base">Криптообмен</p>
-            <p className="text-xs text-[rgba(84,68,53,0.72)] hidden sm:block">Крипто за наличные в Улан-Удэ</p>
+            <p className="text-xs text-[rgba(84,68,53,0.72)]">Крипто за наличные в Улан-Удэ</p>
           </div>
         </Link>
 

@@ -10,12 +10,12 @@ const heroMetrics = [
 ];
 
 const heroFacts = [
-  { label: 'Формат', value: 'Личная встреча в офисе, без посредников' },
-  { label: 'Скорость', value: 'Обмен от 15 минут' },
-  { label: 'Связь', value: 'Пишите в Telegram — отвечаем за минуты' },
+  { label: 'Формат', value: 'Личная встреча в офисе, без посредников. Безопасный и конфиденциальный обмен.' },
+  { label: 'Скорость', value: 'Обмен от 15 минут. Курс фиксируем при встрече, без задержек.' },
+  { label: 'Связь', value: 'Пишите в Telegram — отвечаем за минуты. Менеджер на связи в любое время.' },
 ];
 
-const supportedCurrencies = ['USDT', 'BTC', 'ETH', 'LTC', 'TRX', 'BNB', 'USD', 'CNY'];
+const supportedCurrencies = ['USDT', 'BTC', 'ETH', 'LTC', 'TRX', 'BNB', 'DOGE', 'SOL', 'XRP', 'ADA', 'DOT', 'USD', 'CNY'];
 
 export default function Hero() {
   const factsRef = useRevealChildren<HTMLDivElement>({ staggerMs: 100 });
@@ -49,13 +49,18 @@ export default function Hero() {
                 </svg>
               </a>
               <Link 
-                href="#contact" 
+                href="#lead-form" 
                 className="btn-secondary"
                 onClick={(e) => {
                   e.preventDefault();
-                  const element = document.getElementById('contact');
+                  const element = document.getElementById('lead-form');
                   if (element) {
-                    const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - 80;
+                    // Динамический offset на основе высоты header
+                    const header = document.querySelector('header');
+                    const headerHeight = header ? header.getBoundingClientRect().height : 80;
+                    // На мобильных добавляем дополнительный отступ
+                    const extraOffset = window.innerWidth < 768 ? 10 : 0;
+                    const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - headerHeight - extraOffset;
                     window.scrollTo({
                       top: offsetTop,
                       behavior: 'smooth'
@@ -92,7 +97,7 @@ export default function Hero() {
             </div>
 
             <div className="rounded-[24px] border border-[rgba(73,53,35,0.08)] bg-[rgba(255,255,255,0.56)] p-5">
-              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(106,90,73,0.8)]">
+              <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
                 Валюты
               </div>
               <div className="mt-4 flex flex-wrap gap-3 currency-float">
@@ -104,6 +109,11 @@ export default function Hero() {
                     {currency}
                   </span>
                 ))}
+                <span
+                  className="rounded-full border border-[rgba(62,43,21,0.12)] bg-[rgba(255,255,255,0.84)] px-4 py-2 text-sm font-semibold text-[rgba(106,90,73,0.78)] transition-all duration-200"
+                >
+                  и другие
+                </span>
               </div>
             </div>
           </div>

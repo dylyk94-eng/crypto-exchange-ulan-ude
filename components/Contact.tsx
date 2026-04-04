@@ -185,7 +185,7 @@ export default function Contact() {
             ))}
           </div>
 
-          <div className="surface-strong reveal" style={{ transitionDelay: '0.1s' }}>
+          <div id="lead-form" className="surface-strong reveal" style={{ transitionDelay: '0.1s' }}>
             <div className="mb-6">
               <div className="text-sm font-medium uppercase tracking-[0.18em] text-[rgba(17,94,89,0.76)]">
                 Заявка

@@ -3,7 +3,6 @@ import Link from 'next/link';
 const navItems = [
   { href: '#cities', label: 'Города' },
   { href: '#services', label: 'Услуги' },
-  { href: '#faq', label: 'Вопросы' },
   { href: '#contact', label: 'Контакты' },
 ];
 

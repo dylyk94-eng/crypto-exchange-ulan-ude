@@ -12,28 +12,38 @@ type Rate = {
   markup: number;
 };
 
+// ─── Направление обмена ───────────────────────────────────────────────────────
+type Direction = 'buy' | 'sell';
+
 // ─── Тиерная структура комиссий ───────────────────────────────────────────────
-// Основана на таблице: до 500$ (+3%), 500-2000$ (+2%), 2000-8000$ (+1.5%), 8000$+ (+1%)
 type Tier = {
   label: string;
   maxAmount: number | null; // null = без ограничения
-  markup: number;           // в процентах
+  markup: number;           // в процентах (положительный = наценка, отрицательный = скидка)
 };
 
-const TIERS: Tier[] = [
+// При покупке (рубли → крипта): клиент платит рыночный курс + наценка
+const BUY_TIERS: Tier[] = [
   { label: 'до 500$',        maxAmount: 500,  markup: 3   },
   { label: '500–2 000$',     maxAmount: 2000, markup: 2   },
   { label: '2 000–8 000$',   maxAmount: 8000, markup: 1.5 },
   { label: '8 000$+',        maxAmount: null, markup: 1   },
 ];
 
-function getTier(amountUsd: number): Tier {
-  return TIERS.find((t) => t.maxAmount === null || amountUsd < t.maxAmount) ?? TIERS[TIERS.length - 1];
+// При продаже (крипта → рубли): клиент получает рыночный курс − наценка
+const SELL_TIERS: Tier[] = [
+  { label: 'до 500$',        maxAmount: 500,  markup: -3  },
+  { label: '500$+',          maxAmount: null, markup: -2  },
+];
+
+function getTier(amountUsd: number, direction: Direction): Tier {
+  const tiers = direction === 'buy' ? BUY_TIERS : SELL_TIERS;
+  return tiers.find((t) => t.maxAmount === null || amountUsd < t.maxAmount) ?? tiers[tiers.length - 1];
 }
 
-/** Возвращает курс с учётом тиерной наценки поверх рыночного */
-function getRateWithTier(marketRate: number, amountCrypto: number): number {
-  const tier = getTier(amountCrypto);
+/** Возвращает курс с учётом тиерной наценки (или скидки) поверх рыночного */
+function getRateWithTier(marketRate: number, amountCrypto: number, direction: Direction): number {
+  const tier = getTier(amountCrypto, direction);
   return marketRate * (1 + tier.markup / 100);
 }
 
@@ -64,6 +74,7 @@ export default function Calculator() {
   const [cryptoAmount, setCryptoAmount] = useState('1000');
   const [rubAmount, setRubAmount] = useState('');
   const [activeField, setActiveField] = useState<'crypto' | 'rub'>('crypto');
+  const [direction, setDirection] = useState<Direction>('buy');
   const [isLoading, setIsLoading] = useState(true);
   const sectionRef = useReveal();
 
@@ -78,33 +89,49 @@ export default function Calculator() {
   }, []);
 
   const selectedRate = rates.find((r) => r.symbol === selectedSymbol);
+  const currentTiers = direction === 'buy' ? BUY_TIERS : SELL_TIERS;
 
-  // Получаем текущий тир и курс с учётом суммы
+  // Получаем текущий тир и курс с учётом суммы и направления
   const cryptoNum = parseFloat(cryptoAmount) || 0;
   const rubNum = parseFloat(rubAmount) || 0;
-  const currentTier = getTier(activeField === 'crypto' ? cryptoNum : rubNum / (selectedRate?.market ?? 1));
-  const effectiveRate = selectedRate ? getRateWithTier(selectedRate.market, cryptoNum) : 0;
+  const currentTier = getTier(
+    activeField === 'crypto' ? cryptoNum : rubNum / (selectedRate?.market ?? 1),
+    direction
+  );
+  const effectiveRate = selectedRate ? getRateWithTier(selectedRate.market, cryptoNum, direction) : 0;
+
+  // ─── Вспомогательная: определяем тир из суммы рублей ─────────────────────
+  function getTierFromRub(rubVal: number, market: number, dir: Direction): Tier {
+    const tiers = dir === 'buy' ? BUY_TIERS : SELL_TIERS;
+    for (const t of tiers) {
+      if (t.maxAmount === null) return t;
+      const rateForTier = market * (1 + t.markup / 100);
+      const cryptoForTier = rubVal / rateForTier;
+      if (cryptoForTier < t.maxAmount) return t;
+    }
+    return tiers[tiers.length - 1];
+  }
 
   // ─── Обработчики полей ──────────────────────────────────────────────────────
-  const handleCryptoChange = (value: string) => {
+  const handleCryptoChange = (value: string, dir: Direction = direction) => {
     setActiveField('crypto');
     setCryptoAmount(value);
     if (selectedRate) {
       const num = parseFloat(value) || 0;
-      const rate = getRateWithTier(selectedRate.market, num);
+      const rate = getRateWithTier(selectedRate.market, num, dir);
       setRubAmount(num > 0 ? (num * rate).toFixed(2) : '');
     }
   };
 
-  const handleRubChange = (value: string) => {
+  const handleRubChange = (value: string, dir: Direction = direction) => {
     setActiveField('rub');
     setRubAmount(value);
     if (selectedRate) {
       const num = parseFloat(value) || 0;
-      // Для обратного расчёта определяем тир по эквиваленту в крипте
-      const approxCrypto = num / (selectedRate.market * 1.02); // приближение
-      const rate = getRateWithTier(selectedRate.market, approxCrypto);
-      setCryptoAmount(num > 0 ? (num / rate).toFixed(8) : '');
+      if (num === 0) { setCryptoAmount(''); return; }
+      const tier = getTierFromRub(num, selectedRate.market, dir);
+      const rate = selectedRate.market * (1 + tier.markup / 100);
+      setCryptoAmount((num / rate).toFixed(8));
     }
   };
 
@@ -114,8 +141,27 @@ export default function Calculator() {
     const rate = rates.find((r) => r.symbol === symbol);
     if (rate) {
       const num = parseFloat(cryptoAmount) || 0;
-      const effectiveRate = getRateWithTier(rate.market, num);
+      const effectiveRate = getRateWithTier(rate.market, num, direction);
       setRubAmount(num > 0 ? (num * effectiveRate).toFixed(2) : '');
+    }
+  };
+
+  const handleDirectionChange = (dir: Direction) => {
+    setDirection(dir);
+    // Пересчитываем с новым направлением
+    if (selectedRate) {
+      if (activeField === 'crypto') {
+        const num = parseFloat(cryptoAmount) || 0;
+        const rate = getRateWithTier(selectedRate.market, num, dir);
+        setRubAmount(num > 0 ? (num * rate).toFixed(2) : '');
+      } else {
+        const num = parseFloat(rubAmount) || 0;
+        if (num > 0) {
+          const tier = getTierFromRub(num, selectedRate.market, dir);
+          const rate = selectedRate.market * (1 + tier.markup / 100);
+          setCryptoAmount((num / rate).toFixed(8));
+        }
+      }
     }
   };
 
@@ -124,11 +170,18 @@ export default function Calculator() {
   useEffect(() => {
     if (marketRate > 0 && activeField === 'crypto') {
       const num = parseFloat(cryptoAmount) || 0;
-      const rate = getRateWithTier(marketRate, num);
+      const rate = getRateWithTier(marketRate, num, direction);
       setRubAmount(num > 0 ? (num * rate).toFixed(2) : '');
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketRate]);
+
+  // Разница с рыночным курсом
+  const marketRubAmount = cryptoNum * (selectedRate?.market ?? 0);
+  const effectiveRubAmount = parseFloat(rubAmount) || 0;
+  const rubDifference = Math.abs(effectiveRubAmount - marketRubAmount);
+
+  const isBuy = direction === 'buy';
 
   return (
     <section className="section-shell">
@@ -145,27 +198,77 @@ export default function Calculator() {
             Укажите сумму — мы покажем, сколько получите по текущему курсу с учётом наценки.
           </p>
 
+          {/* ─── Переключатель направления ───────────────────────────────── */}
+          <div className="mt-6 inline-flex rounded-xl border border-[rgba(73,53,35,0.12)] bg-[rgba(255,255,255,0.5)] p-1 gap-1">
+            <button
+              type="button"
+              onClick={() => handleDirectionChange('buy')}
+              className={`rounded-lg px-5 py-2 text-sm font-medium transition-all duration-200 ${
+                isBuy
+                  ? 'bg-[rgba(15,118,110,0.9)] text-white shadow-sm'
+                  : 'text-muted hover:text-[rgba(31,26,20,0.8)]'
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Покупка
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDirectionChange('sell')}
+              className={`rounded-lg px-5 py-2 text-sm font-medium transition-all duration-200 ${
+                !isBuy
+                  ? 'bg-[rgba(120,53,15,0.85)] text-white shadow-sm'
+                  : 'text-muted hover:text-[rgba(31,26,20,0.8)]'
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                </svg>
+                Продажа
+              </span>
+            </button>
+          </div>
+
+          {/* ─── Подпись под переключателем ──────────────────────────────── */}
+          <p className="mt-2 text-xs text-muted">
+            {isBuy
+              ? 'Вы платите рублями → получаете криптовалюту'
+              : 'Вы отдаёте криптовалюту → получаете рубли'}
+          </p>
+
           {/* ─── Тиеры (наглядная шкала) ─────────────────────────────────── */}
-          <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {TIERS.map((tier) => (
-              <div
-                key={tier.label}
-                className={`rounded-xl border px-3 py-2 text-center transition-all duration-300 ${
-                  currentTier.label === tier.label
-                    ? 'border-[rgba(15,118,110,0.5)] bg-[rgba(15,118,110,0.1)] text-[rgba(17,94,89,0.95)]'
-                    : 'border-[rgba(73,53,35,0.1)] bg-[rgba(255,255,255,0.4)] text-muted'
-                }`}
-              >
-                <div className="text-xs font-medium">{tier.label}</div>
+          <div className={`mt-6 grid gap-2 ${isBuy ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-2'}`}>
+            {currentTiers.map((tier) => {
+              const isActive = currentTier.label === tier.label;
+              return (
                 <div
-                  className={`text-base font-semibold ${
-                    currentTier.label === tier.label ? 'text-[rgba(17,94,89,0.95)]' : 'text-muted'
+                  key={tier.label}
+                  className={`rounded-xl border px-3 py-2 text-center transition-all duration-300 ${
+                    isActive
+                      ? isBuy
+                        ? 'border-[rgba(15,118,110,0.5)] bg-[rgba(15,118,110,0.1)] text-[rgba(17,94,89,0.95)]'
+                        : 'border-[rgba(120,53,15,0.4)] bg-[rgba(120,53,15,0.08)] text-[rgba(120,53,15,0.95)]'
+                      : 'border-[rgba(73,53,35,0.1)] bg-[rgba(255,255,255,0.4)] text-muted'
                   }`}
                 >
-                  +{tier.markup}%
+                  <div className="text-xs font-medium">{tier.label}</div>
+                  <div
+                    className={`text-base font-semibold ${
+                      isActive
+                        ? isBuy ? 'text-[rgba(17,94,89,0.95)]' : 'text-[rgba(120,53,15,0.95)]'
+                        : 'text-muted'
+                    }`}
+                  >
+                    {tier.markup > 0 ? '+' : ''}{tier.markup}%
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2">
@@ -191,7 +294,9 @@ export default function Calculator() {
 
               <div>
                 <label htmlFor="calc-amount-crypto" className="field-label">
-                  Сумма в {selectedSymbol}
+                  {isBuy
+                    ? `Хочу получить (${selectedSymbol})`
+                    : `Отдаю (${selectedSymbol})`}
                 </label>
                 <input
                   id="calc-amount-crypto"
@@ -207,29 +312,20 @@ export default function Calculator() {
               </div>
 
               <div className="flex items-center justify-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (activeField === 'crypto') {
-                      setActiveField('rub');
-                      handleRubChange(rubAmount);
-                    } else {
-                      setActiveField('crypto');
-                      handleCryptoChange(cryptoAmount);
-                    }
-                  }}
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(73,53,35,0.12)] bg-[rgba(255,255,255,0.7)] text-muted transition hover:border-[rgba(15,118,110,0.3)] hover:text-[rgba(17,94,89,0.9)] active:scale-[0.98] md:h-10 md:w-10"
-                  aria-label="Поменять направление"
-                >
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(73,53,35,0.12)] bg-[rgba(255,255,255,0.7)] text-muted md:h-10 md:w-10">
+                  {/* Стрелка: при покупке — вниз (рубли → крипта), при продаже — вверх */}
                   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d={isBuy
+                        ? 'M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4'
+                        : 'M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4'} />
                   </svg>
-                </button>
+                </div>
               </div>
 
               <div>
                 <label htmlFor="calc-amount-rub" className="field-label">
-                  Сумма в ₽
+                  {isBuy ? 'Плачу (₽)' : 'Получу (₽)'}
                 </label>
                 <input
                   id="calc-amount-rub"
@@ -246,7 +342,11 @@ export default function Calculator() {
             </div>
 
             {/* ─── Результат ────────────────────────────────────────────── */}
-            <div className="flex flex-col justify-center rounded-[var(--radius-lg,24px)] bg-[rgba(15,118,110,0.1)] p-6 md:p-8">
+            <div
+              className={`flex flex-col justify-center rounded-[var(--radius-lg,24px)] p-6 md:p-8 ${
+                isBuy ? 'bg-[rgba(15,118,110,0.1)]' : 'bg-[rgba(120,53,15,0.08)]'
+              }`}
+            >
               {isLoading ? (
                 <div className="space-y-3">
                   <div className="shimmer h-4 w-32" />
@@ -256,7 +356,11 @@ export default function Calculator() {
               ) : selectedRate ? (
                 <>
                   <div className="text-sm font-medium text-muted">Приблизительная сумма</div>
-                  <div className="text-xs text-muted mt-1">Вы получите</div>
+                  <div className="text-xs text-muted mt-1">
+                    {isBuy
+                      ? (activeField === 'crypto' ? 'Вы заплатите' : 'Вы получите')
+                      : (activeField === 'crypto' ? 'Вы получите' : 'Вам нужно отдать')}
+                  </div>
                   <div className="mt-3 text-3xl font-semibold text-[rgba(31,26,20,0.95)] md:text-4xl">
                     {activeField === 'crypto' ? (
                       <AnimatedResult value={parseFloat(rubAmount) || 0} suffix=" ₽" decimals={0} />
@@ -268,6 +372,7 @@ export default function Calculator() {
                       />
                     )}
                   </div>
+
                   <div className="mt-4 space-y-1 text-sm text-muted">
                     <div>
                       Рыночный курс: {formatRub(selectedRate.market)} ₽ за 1 {selectedSymbol}
@@ -275,10 +380,28 @@ export default function Calculator() {
                     <div>
                       Ваш курс: {formatRub(effectiveRate)} ₽ за 1 {selectedSymbol}
                     </div>
+
+                    {/* Разница с рыночным курсом */}
+                    {cryptoNum > 0 && (
+                      <div className="text-xs text-muted">
+                        Наша комиссия: ≈ {formatRub(rubDifference)} ₽
+                      </div>
+                    )}
+
                     {/* Активный тир */}
-                    <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[rgba(15,118,110,0.12)] px-3 py-1 text-xs font-medium text-[rgba(17,94,89,0.9)]">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[rgba(17,94,89,0.7)]" />
-                      Тариф {currentTier.label} — наценка +{currentTier.markup}%
+                    <div
+                      className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium ${
+                        isBuy
+                          ? 'bg-[rgba(15,118,110,0.12)] text-[rgba(17,94,89,0.9)]'
+                          : 'bg-[rgba(120,53,15,0.1)] text-[rgba(120,53,15,0.9)]'
+                      }`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 rounded-full ${
+                          isBuy ? 'bg-[rgba(17,94,89,0.7)]' : 'bg-[rgba(120,53,15,0.7)]'
+                        }`}
+                      />
+                      Тариф {currentTier.label} — {currentTier.markup > 0 ? '+' : ''}{currentTier.markup}%
                     </div>
                   </div>
                 </>
