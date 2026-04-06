@@ -76,7 +76,7 @@ export default function Home() {
       <main id="main" className="relative" tabIndex={-1}>
         <Hero />
         {/* <CryptoRates /> */}
-        <Calculator />
+        {process.env.HIDE_CALCULATOR !== 'true' && <Calculator />}
         <Cities />
         <Services />
         <Testimonials />

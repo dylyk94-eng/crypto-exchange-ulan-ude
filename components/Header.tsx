@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const navItems = [
-  { href: '#calc-crypto', label: 'Калькулятор' },
+  // { href: '#calc-crypto', label: 'Калькулятор' }, // Скрыто временно
   { href: '#office', label: 'Офис' },
   { href: '#services', label: 'Услуги' },
   { href: '#contact', label: 'Контакты' },
