@@ -71,7 +71,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <Header />
-      <RateTicker />
+      {process.env.HIDE_RATE_TICKER !== 'true' && <RateTicker />}
 
       <main id="main" className="relative" tabIndex={-1}>
         <Hero />
