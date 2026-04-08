@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { rateLimit } from '@/lib/rate-limit';
 import logger from '@/lib/logger';
+import { escapeHtmlText } from '@/lib/telegram-escape';
 
 const DIRECTION_LABELS: Record<string, string> = {
-  sell: 'Продать крипту за рубли',
-  buy: 'Купить крипту за рубли',
-  transfer: 'Международный перевод',
+  sell: '🔄 Продать крипту за рубли',
+  buy: '💰 Купить крипту за рубли',
+  transfer: '🌐 Международный перевод',
 };
 
 const submitSchema = z.object({
@@ -69,19 +70,24 @@ export async function POST(request: NextRequest) {
   const { direction, name, phone, telegram, currency, amount, message } = parsed.data;
 
   const telegramMessage = [
-    'Новая заявка с сайта',
+    '📊 <b>Новая заявка с сайта</b>',
     '',
-    `Направление: ${DIRECTION_LABELS[direction] ?? direction}`,
-    `Имя: ${name}`,
-    `Телефон: ${phone}`,
-    `Telegram: ${telegram ?? 'Не указан'}`,
-    `Валюта: ${currency ?? 'Не указана'}`,
-    `Сумма: ${amount}`,
-    `Комментарий: ${message ?? 'Нет'}`,
+    `<b>Направление:</b> ${DIRECTION_LABELS[direction] ?? direction}`,
+    `<b>Имя:</b> ${escapeHtmlText(name)}`,
+    `<b>Телефон:</b> ${escapeHtmlText(phone)}`,
+    `<b>Telegram:</b> ${escapeHtmlText(telegram ?? 'Не указан')}`,
+    `<b>Валюта:</b> ${escapeHtmlText(currency ?? 'Не указана')}`,
+    `<b>Сумма:</b> ${escapeHtmlText(amount)}`,
+    `<b>Комментарий:</b> ${escapeHtmlText(message ?? 'Нет')}`,
+    '',
+    `🕐 <b>Время:</b> ${new Date().toLocaleString('ru-RU')}`,
   ].join('\n');
 
   try {
     if (isConfigured) {
+      // Debug: Log message before sending
+      logger.debug({ message: telegramMessage, messageLength: telegramMessage.length }, 'Telegram message payload');
+
       const tgResponse = await fetch(
         `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
         {
@@ -90,6 +96,7 @@ export async function POST(request: NextRequest) {
           body: JSON.stringify({
             chat_id: TELEGRAM_CHAT,
             text: telegramMessage,
+            parse_mode: 'HTML',
             disable_web_page_preview: true,
           }),
         }
@@ -97,7 +104,15 @@ export async function POST(request: NextRequest) {
 
       if (!tgResponse.ok) {
         const tgBody = await tgResponse.text();
-        logger.error({ status: tgResponse.status, body: tgBody }, 'Telegram API error');
+        logger.error(
+          { 
+            status: tgResponse.status, 
+            body: tgBody,
+            messageLength: telegramMessage.length,
+            messageSnippet: telegramMessage.substring(0, 200)
+          }, 
+          'Telegram API error'
+        );
         return NextResponse.json(
           { error: 'Не удалось отправить заявку. Попробуйте ещё раз.' },
           { status: 502 }
